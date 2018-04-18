@@ -39,17 +39,8 @@ public class AppExpirationWatcher {
     @Inject
     private Logger log;
 
-    public void register(VaadinSession session) {
-        lock.writeLock().lock();
-        try {
-            sessions.add(session);
-        } finally {
-            lock.writeLock().unlock();
-        }
-    }
-
     // called by scheduler
-    public synchronized void notifyExpiring() {
+    public void notifyExpiring() {
         // obtain system session with all permissions
         // check session timeout on behalf of this session
         // it is required due to session prolongation on request
@@ -119,6 +110,11 @@ public class AppExpirationWatcher {
 
     @EventListener
     public void onAppStart(AppStartedEvent event) {
-        register(VaadinSession.getCurrent());
+        lock.writeLock().lock();
+        try {
+            sessions.add(VaadinSession.getCurrent());
+        } finally {
+            lock.writeLock().unlock();
+        }
     }
 }
