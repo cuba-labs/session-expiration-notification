@@ -82,7 +82,7 @@ public class AppExpirationWatcher {
         List<VaadinSession> closedSessions = new ArrayList<>();
         for (VaadinSession session : activeSessions) {
             // obtain lock on session state
-            session.access(() -> {
+            session.accessSynchronously(() -> {
                 if (session.getState() == VaadinSession.State.OPEN) {
                     // active app in this session
                     App app = App.getInstance();
