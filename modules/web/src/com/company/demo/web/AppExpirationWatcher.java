@@ -102,7 +102,7 @@ public class AppExpirationWatcher {
 
         lock.writeLock().lock();
         try {
-            activeSessions.removeAll(closedSessions);
+            sessions.removeAll(closedSessions);
         } finally {
             lock.writeLock().unlock();
         }
